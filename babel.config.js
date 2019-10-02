@@ -3,39 +3,54 @@ module.exports = function(api) {
 
     const presets = [
         [
-            'es2015', 
-            'es2016', 
-            'es2017', 
-            'latest',
-            ["env",{
+            "@babel/preset-env", {
                 "targets": {
                      ie: 11,
-                    "browsers": ["> 0.2%, not dead, not op_mini all, Explorer 11, last 4 Edge versions"]
+                    "browsers": ["> 0.2%, not dead, not op_mini all"]
                 },
-                debug: true,
-                "useBuiltIns": true
-            }],
-            "react",
-            "stage-0"
+                "modules": false,
+                "debug":true,
+                "useBuiltIns": 'usage',
+                'corejs' : '2',
+            }
         ],
-        "ignore": [
-            "node_modules"
-        ],
+        ["@babel/preset-react"]
     ];
     const plugins = [
-        "transform-es2015-arrow-functions",
-        "transform-class-properties",
-        "syntax-class-properties",
-        "transform-decorators",
-        "transform-react-constant-elements",
-        "transform-react-inline-elements",
-        "transform-runtime", 
-        "transform-regenerator"    
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-regenerator",
+        "@babel/plugin-proposal-class-properties",
+        [
+            "@babel/plugin-proposal-decorators",
+            {
+                legacy: true
+            }
+        ],
+        "@babel/plugin-transform-react-constant-elements",
+        "@babel/plugin-transform-react-inline-elements",
+        "transform-es2015-shorthand-properties",
+        "@babel/plugin-transform-runtime"
     ];
 
     return {
         presets,
         plugins,
+        "env": {
+            "test": {
+                "presets": [
+                    [
+                        "@babel/preset-env",
+                        {
+                            "targets": {
+                                "node": "current",
+                                "browsers": ["> 0.25%, not dead, not op_mini all"]
+                            }
+                        }
+                    ]
+                ]
+            }
+        }
     }
 }
 

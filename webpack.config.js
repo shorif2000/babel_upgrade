@@ -1,15 +1,12 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-//const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 //const CleanWebpackPlugin = require('clean-webpack-plugin');
-//const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
     entry: [
-        'babel-polyfill',
         './src/index.js',
     ],
     output: {
@@ -22,34 +19,29 @@ module.exports = {
     },
     module: {
         rules: [
-            /*{
+            {
                 test: /\.json$/,
                 loader: "json-loader"
-            },*/
+            },
             {
                 test: /\.js[x]?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
                     cacheDirectory: true,
-                    presets: [ 'es2015', 'es2016', 'es2017', 'latest', 'stage-0', 'react' ],
-                    plugins: [ 'transform-runtime', 'transform-regenerator' ]
+                    presets: [ '@babel/preset-react' ],
+                    plugins: [ '@babel/transform-runtime', '@babel/transform-regenerator' ]
                 }
             },            
              {
                 test: /\.css$/,
-                use: [
-                  {
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {
-                      // you can specify a publicPath here
-                      // by default it uses publicPath in webpackOptions.output
-                      publicPath: __dirname + '/docs/stylesheets',
-                      hmr: process.env.NODE_ENV === 'development',
-                    },
-                  },
-                  'css-loader',
-                ]
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        { loader: 'css-loader', options: { importLoaders: 1 } },
+                        'postcss-loader'
+                    ]
+                })
             },
             {
                 test: /\.(png|woff|woff2|eot|ttf|svg)$/,
@@ -93,12 +85,12 @@ module.exports = {
             filename: 'index.html',
             inject: true
         }),
-        //new UglifyJsPlugin(),
+        new UglifyJsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
                 'REACT_APP_GA_TRACKING_ID' : JSON.stringify('UA-101927425-1'),
-                'VERSION': JSON.stringify('62')
+                'VERSION': JSON.stringify('57')
             }
         }),
         new webpack.ProvidePlugin({
@@ -107,17 +99,10 @@ module.exports = {
             jquery: 'jquery'
         }),
         
-        //new ExtractTextPlugin("[name].bundle.css")
-        new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // all options are optional
-            filename: '[name].css',
-            chunkFilename: '[id].css',
-            ignoreOrder: false, // Enable to remove warnings about conflicting order
-        }),
+        new ExtractTextPlugin("[name].bundle.css")
     ],
     devtool: 'source-map',
-    externals: []
+    externals: [],
 };
 
 
