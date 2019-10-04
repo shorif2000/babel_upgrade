@@ -41,7 +41,7 @@ library.add(faTrash);
 library.add(faTrashAlt);
 library.add(faUpload);
 
-require("babel-core/register");
+require("@babel/register");
 require("babel-polyfill");
 
 
