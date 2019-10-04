@@ -5,8 +5,7 @@ module.exports = function(api) {
         [
             "@babel/preset-env", {
                 "targets": {
-                     ie: 11,
-                    "browsers": ["> 0.2%, not dead, not op_mini all"]
+                     "ie": 11,
                 },
                 "modules": false,
                 "debug":true,
@@ -19,7 +18,11 @@ module.exports = function(api) {
     const plugins = [
         "@babel/plugin-syntax-dynamic-import",
         "@babel/plugin-proposal-object-rest-spread",
-        "@babel/plugin-transform-regenerator",
+        ["@babel/plugin-transform-regenerator", {
+            "asyncGenerators": false,
+            "generators": false,
+            "async": false
+          }],
         "@babel/plugin-proposal-class-properties",
         [
             "@babel/plugin-proposal-decorators",
@@ -43,8 +46,7 @@ module.exports = function(api) {
                         "@babel/preset-env",
                         {
                             "targets": {
-                                "node": "current",
-                                "browsers": ["> 0.25%, not dead, not op_mini all"]
+                                "ie": 11,
                             }
                         }
                     ]
@@ -53,4 +55,3 @@ module.exports = function(api) {
         }
     }
 }
-
