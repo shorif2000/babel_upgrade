@@ -41,9 +41,6 @@ library.add(faTrash);
 library.add(faTrashAlt);
 library.add(faUpload);
 
-require("@babel/register");
-require("babel-polyfill");
-
 
 const store = createStore(
         reducers,
