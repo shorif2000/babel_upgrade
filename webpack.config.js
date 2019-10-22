@@ -27,7 +27,10 @@ module.exports = {
             {
                 test: /\.js[x]?$/,
                 loader: 'babel-loader',
-                exclude: /node_modules/,
+                exclude: {
+                  test: /node_modules/,
+                  not: [/@babel\/register/],
+                },
                 query: {
                     cacheDirectory: true,
                     presets: [ '@babel/preset-react' ],
